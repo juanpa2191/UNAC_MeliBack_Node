@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const corsMiddleware = require('./src/middleware/cors');
+const productRoutes = require('./src/routes/productRoutes');
 
 
 
@@ -15,6 +16,7 @@ app.use(corsMiddleware);
 const { swaggerUi, swaggerSpec } = require('./src/config/swagger');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use('/api/products', productRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
