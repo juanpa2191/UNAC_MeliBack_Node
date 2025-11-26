@@ -1,10 +1,9 @@
 require('dotenv').config();
 const express = require('express');
+const {connectDB} = require('./src/config/database');
+const {syncDatabase} = require('./src/models');
 const corsMiddleware = require('./src/middleware/cors');
 const productRoutes = require('./src/routes/productRoutes');
-
-
-
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,6 +21,9 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
+//Conexion a la base de datos y sincronización de modelos
+connectDB();
+syncDatabase();
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

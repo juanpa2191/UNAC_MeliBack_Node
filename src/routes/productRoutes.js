@@ -1,4 +1,5 @@
 const express = require('express');
+const productController = require('../controllers/productController');
 
 const router = express.Router();
 
@@ -63,9 +64,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.get('/', (req, res) => {
-  res.json([{ id: 1, name: 'Product A' }, { id: 2, name: 'Product B' }]);
-});
+router.get('/', productController.getAllProducts);
 /**
  * @swagger
  * /api/products/{id}:
@@ -89,12 +88,7 @@ router.get('/', (req, res) => {
  *       404:
  *         description: Producto no encontrado
  */
-router.get('/:id', (req, res) => {
-  const productId = req.params.id;
-  if (productId < 0) 
-    res.status(404).json({ message: 'Product not found' });
-  res.json({ id: productId, name: `Product ${productId}` });
-});
+router.get('/:id', productController.getProductById);
 /**
  * @swagger
  * /api/products:
@@ -115,10 +109,7 @@ router.get('/:id', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.post('/', (req, res) => {
-  const newProduct = req.body;
-  res.status(201).json(newProduct);
-});
+router.post('/', productController.createProduct);
 /**
  * @swagger
  * /api/products/{id}:
@@ -148,11 +139,7 @@ router.post('/', (req, res) => {
  *       404:
  *         description: Producto no encontrado
  */
-router.put('/:id', (req, res) => {
-  const productId = req.params.id;
-  const updatedProduct = req.body;
-  res.json({ id: productId, ...updatedProduct });
-});
+router.put('/:id', productController.update)
 /**
  * @swagger
  * /api/products/{id}:
@@ -172,9 +159,33 @@ router.put('/:id', (req, res) => {
  *       404:
  *         description: Producto no encontrado
  */
-router.delete('/:id', (req, res) => {
-  const productId = req.params.id;
-  res.status(204).send();
-});
+router.delete('/:id', productController.deleteProduct);
+
+/**
+ * @swagger
+ * /api/products/name/{name}:
+ *   get:
+ *     summary: Obtener productos por nombre
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Nombre del producto
+ *     responses:
+ *       200:
+ *         description: Lista de productos encontrados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: No se encontraron productos
+ */
+router.get('/name/:name', productController.getProductByName);
 
 module.exports = router;
