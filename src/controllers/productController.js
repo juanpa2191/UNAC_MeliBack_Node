@@ -5,7 +5,6 @@ const productController = {
   // Get all products
   getAllProducts: async (req, res) => {
     try {
-      //   const valor = 5/0;
       const products = await Product.findAll();
       res.status(200).json(products);
     } catch (err) {
@@ -30,7 +29,6 @@ const productController = {
   createProduct: async (req, res) => {
     try {
       const { name, description, price, category, stock, imageUrl } = req.body;
-      console.log(req.body);
       const newProduct = await Product.create({
         name,
         description,
